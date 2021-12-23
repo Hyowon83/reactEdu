@@ -42,6 +42,13 @@ import './App.css';
 
 
 class App extends Component {
+  //컴포넌트가 실행되기 전에 먼저 constructor를 실행시켜서 state를 초기화 시킨다.
+  constructor(props) {
+    super(props);
+    this.state = {
+      subject:{title:"WEB", sub:"world wide web!!!"}
+    }
+  }
   render() {
     return (
       <div className="App">
@@ -49,6 +56,12 @@ class App extends Component {
         <Subject title = "WEB" sub = "world wide web!!!"></Subject>
         <Subject title = "React" sub = "For UI"></Subject>
         <Subject title = "Jang Hyowon" sub = "PLM Solution Engineer"></Subject>
+        {/* constructor를 사용하는 방법 */}
+        {/* 상위인 state를 하위의 props로 보낸다. */}
+        <Subject
+          title = {this.state.subject.title}
+          sub = {this.state.subject.sub}>
+        </Subject>
         <TOC></TOC>
         {/* <Content></Content> */}
         <Content title = "HTML" desc = "HTML is HyperText Markup Language."></Content>
