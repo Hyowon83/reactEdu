@@ -46,25 +46,42 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      subject:{title:"WEB", sub:"world wide web!!!"}
+      mode:"welcome",
+      subject:{title:"WEB", sub:"world wide web!!!"},
+      welcome:{title:"Welcome", desc:"Hello, React!"},
+      contents:[
+        {id:1, title:"HTML", desc:"HTML is for infomation"},
+        {id:2, title:"CSS", desc:"CSS is for design"},
+        {id:3, title:"JavaScript", desc:"JavaScript is for interactive"}
+      ]
     }
   }
   render() {
+    console.log("App render");
+    var _title, _desc = null;
+    if(this.state.mode === "welcome") {
+      _title = this.state.welcome.title;
+      _desc = this.state.welcome.desc;
+    } else if(this.state.mode === "read") {
+      _title = this.state.contents[0].title;
+      _desc = this.state.contents[0].desc;
+    }
     return (
       <div className="App">
         {/* <Subject></Subject> */}
-        <Subject title = "WEB" sub = "world wide web!!!"></Subject>
+        {/* <Subject title = "WEB" sub = "world wide web!!!"></Subject>
         <Subject title = "React" sub = "For UI"></Subject>
-        <Subject title = "Jang Hyowon" sub = "PLM Solution Engineer"></Subject>
+        <Subject title = "Jang Hyowon" sub = "PLM Solution Engineer"></Subject> */}
         {/* constructor를 사용하는 방법 */}
         {/* 상위인 state를 하위의 props로 보낸다. */}
         <Subject
           title = {this.state.subject.title}
           sub = {this.state.subject.sub}>
         </Subject>
-        <TOC></TOC>
+        {/* <TOC></TOC> */}
+        <TOC data = {this.state.contents}></TOC>
         {/* <Content></Content> */}
-        <Content title = "HTML" desc = "HTML is HyperText Markup Language."></Content>
+        <Content title = {_title} desc = {_desc}></Content>
         <Content title = "Genergy" desc = "PLM is Product Lifecycle Management."></Content>
       </div>
     );
