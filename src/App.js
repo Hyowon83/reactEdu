@@ -27,7 +27,7 @@ import './App.css';
 //   }
 // }
 
-//재사용성을 위한 컴포넌트로 바꾸기
+// 재사용성을 위한 컴포넌트로 바꾸기
 // class Subject extends Component {
 //   render() {
 //     return (
@@ -46,7 +46,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode:"read",
+      mode:"welcome",
+      selected_content_id:2,
       subject:{title:"WEB", sub:"world wide web!!!"},
       welcome:{title:"Welcome", desc:"Hello, React!"},
       contents:[
@@ -63,8 +64,16 @@ class App extends Component {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
     } else if(this.state.mode === "read") {
-      _title = this.state.contents[0].title;
-      _desc = this.state.contents[0].desc;
+      var i = 0;
+      while(i < this.state.contents.length) {
+        var data = this.state.contents[i];
+        if(data.id === this.state.selected_content_id) {
+          _title = data.title;
+          _desc = data.desc;
+          break;
+        }
+        i += 1;
+      }
     }
     return (
       <div className="App">
@@ -76,29 +85,26 @@ class App extends Component {
 
         {/* constructor를 사용하는 방법 */}
         {/* 상위인 state를 하위의 props로 보낸다. */}
-        {/* <Subject
+        <Subject
           title = {this.state.subject.title}
-          sub = {this.state.subject.sub}>
-        </Subject> */}
+          sub = {this.state.subject.sub}
+          onChangePage = {function() {
+            this.setState({ mode:"welcome" });
+            // alert("Hey :)");
+          }.bind(this)}
+        >
+        </Subject>
 
-        <header>
-            <h1><a href="/" onClick={function(e) {
-              console.log(e);
-              e.preventDefault(); //a태그의 기본적인 동작(reload)을 금지 시킴.
-              // alert("Hi :)");
-              //함수 안에서는 this의 값이 정해지지 않아서 에러가 나기 때문에 바인드로 this를 묶어줘야한다.
-              // this.state.mode = "welcome"; 아래와 같이 써야만 함.
-              this.setState({
-                mode:"welcome"
-              });
-            }.bind(this)}>{this.state.subject.title}</a></h1>
-            {this.state.subject.sub}
-        </header>
+        <TOC
+          onChangePage = {function(id) {
+            this.setState({ 
+              mode:"read",
+              selected_content_id:Number(id)
+            });
+            // alert("TOC");
+          }.bind(this)}
+          data = {this.state.contents}></TOC>
 
-        {/* <TOC></TOC> */}
-        <TOC data = {this.state.contents}></TOC>
-
-        {/* <Content></Content> */}
         <Content title = {_title} desc = {_desc}></Content>
         <Content title = "Genergy" desc = "PLM is Product Lifecycle Management."></Content>
       </div>

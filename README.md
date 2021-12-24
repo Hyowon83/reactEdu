@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+#### 코드 정리
+- 기본
+class Subject extends Component {
+  render() {
+    return (
+      <!-- 반드시 하나의 최상위 태그만 써야한다. -->
+      <header>
+          <h1>WEB</h1>
+          world wide web!
+      </header>
+    );
+  }
+}
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- 재사용성을 위한 컴포넌트로 바꾸기 (변수설정)
+class Subject extends Component {
+  render() {
+    return (
+      <header>
+          <h1>{this.props.title}</h1>
+          {this.props.sub}
+      </header>
+    );
+  }
+}
 
-## Available Scripts
+- state와 props에 관하여
+class App extends Component {
+  <!-- 컴포넌트가 실행되기 전에 먼저 constructor를 실행시켜서 state를 초기화 시킨다. -->
+  constructor(props) {
+    super(props);
+    this.state = {
+      mode:"read",
+      subject:{title:"WEB", sub:"world wide web!!!"},
+      welcome:{title:"Welcome", desc:"Hello, React!"},
+      contents:[
+        {id:1, title:"HTML", desc:"HTML is for infomation"},
+        {id:2, title:"CSS", desc:"CSS is for design"},
+        {id:3, title:"JavaScript", desc:"JavaScript is for interactive"}
+      ]
+    }
+  }
+  render() {
+    console.log("App render");
+    var _title, _desc = null;
+    if(this.state.mode === "welcome") {
+      _title = this.state.welcome.title;
+      _desc = this.state.welcome.desc;
+    } else if(this.state.mode === "read") {
+      _title = this.state.contents[0].title;
+      _desc = this.state.contents[0].desc;
+    }
+    return (
+      <div className="App">
+        {/* <Subject></Subject> */}
 
-In the project directory, you can run:
+        {/* <Subject title = "WEB" sub = "world wide web!!!"></Subject>
+        <Subject title = "React" sub = "For UI"></Subject>
+        <Subject title = "Jang Hyowon" sub = "PLM Solution Engineer"></Subject> */}
 
-### `npm start`
+        {/* constructor를 사용하는 방법 */}
+        {/* 상위인 state를 하위의 props로 보낸다. */}
+        {/* <Subject
+          title = {this.state.subject.title}
+          sub = {this.state.subject.sub}>
+        </Subject> */}
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+        <header>
+            <h1><a href="/" onClick={function(e) {
+              console.log(e);
+              e.preventDefault(); //a태그의 기본적인 동작(reload)을 금지 시킴.
+              // alert("Hi :)");
+              //함수 안에서는 this의 값이 정해지지 않아서 에러가 나기 때문에 바인드로 this를 묶어줘야한다.
+              // this.state.mode = "welcome"; 아래와 같이 써야만 함.
+              this.setState({
+                mode:"welcome"
+              });
+            }.bind(this)}>{this.state.subject.title}</a></h1>
+            {this.state.subject.sub}
+        </header>
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+        {/* <TOC></TOC> */}
+        <TOC data = {this.state.contents}></TOC>
 
-### `npm test`
+        {/* <Content></Content> */}
+        <Content title = {_title} desc = {_desc}></Content>
+        <Content title = "Genergy" desc = "PLM is Product Lifecycle Management."></Content>
+      </div>
+    );
+  }
+}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<!-- 반드시 써줘야 이 코드를 기본으로 인식하여 불러온다. -->
+export default App;
