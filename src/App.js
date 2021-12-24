@@ -81,18 +81,24 @@ class App extends Component {
       _article = <ReadContent title = {_title} desc = {_desc}></ReadContent>;
     } else if(this.state.mode === "create") {
       _article = <CreateContent onSubmit={function(_title, _desc){
-        console.log(_title, _desc);
         this.max_content_id += 1;
-
-        //push는 원본을 바꾸면서 원소를 추가한다.
-        // this.state.contents.push({id:this.max_content_id, title:_title, desc:_desc});
         
-        //원본을 바꾸지 않고 추가만 하는 concat을 사용하는것이 좋다. 익숙해지기.
-        var _contents = this.state.contents.concat({id:this.max_content_id, title:_title, desc:_desc});
-        
-        this.setState({
-          contents:_contents
-        });
+        if(_title === "" || _desc === "") {
+          alert("값을 채워주세요.");
+        } else {
+          console.log(_title, _desc);
+          //push는 원본을 바꾸면서 원소를 추가한다.
+          // this.state.contents.push({id:this.max_content_id, title:_title, desc:_desc});
+          
+          //원본을 바꾸지 않고 추가만 하는 concat을 사용하는것이 좋다. 익숙해지기.
+          var _contents = this.state.contents.concat({id:this.max_content_id, title:_title, desc:_desc});
+          //concat은 원본의 복제본을 만들어서 원본을 해치지 않고 새로 만드는 것이다.
+          //수정 할 때에도 복제본을 가지고 수정하는것이 좋다고 한다.
+  
+          this.setState({
+            contents:_contents
+          });
+        }
       }.bind(this)}></CreateContent>;
     }
     return (
