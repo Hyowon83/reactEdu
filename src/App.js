@@ -46,7 +46,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode:"welcome",
+      mode:"read",
       subject:{title:"WEB", sub:"world wide web!!!"},
       welcome:{title:"Welcome", desc:"Hello, React!"},
       contents:[
@@ -69,17 +69,35 @@ class App extends Component {
     return (
       <div className="App">
         {/* <Subject></Subject> */}
+
         {/* <Subject title = "WEB" sub = "world wide web!!!"></Subject>
         <Subject title = "React" sub = "For UI"></Subject>
         <Subject title = "Jang Hyowon" sub = "PLM Solution Engineer"></Subject> */}
+
         {/* constructor를 사용하는 방법 */}
         {/* 상위인 state를 하위의 props로 보낸다. */}
-        <Subject
+        {/* <Subject
           title = {this.state.subject.title}
           sub = {this.state.subject.sub}>
-        </Subject>
+        </Subject> */}
+
+        <header>
+            <h1><a href="/" onClick={function(e) {
+              console.log(e);
+              e.preventDefault(); //a태그의 기본적인 동작(reload)을 금지 시킴.
+              // alert("Hi :)");
+              //함수 안에서는 this의 값이 정해지지 않아서 에러가 나기 때문에 바인드로 this를 묶어줘야한다.
+              // this.state.mode = "welcome"; 아래와 같이 써야만 함.
+              this.setState({
+                mode:"welcome"
+              });
+            }.bind(this)}>{this.state.subject.title}</a></h1>
+            {this.state.subject.sub}
+        </header>
+
         {/* <TOC></TOC> */}
         <TOC data = {this.state.contents}></TOC>
+
         {/* <Content></Content> */}
         <Content title = {_title} desc = {_desc}></Content>
         <Content title = "Genergy" desc = "PLM is Product Lifecycle Management."></Content>
