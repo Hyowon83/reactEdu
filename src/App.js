@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import Subject from './components/Subject';
-import Content from './components/Content';
+import ReadContent from './components/ReadContent';
+import CreateContent from './components/CreateContent';
 import TOC from './components/TOC';
+import Control from './components/Control';
 import './App.css';
 
 // class Subject extends Component {
@@ -45,8 +47,9 @@ class App extends Component {
   //컴포넌트가 실행되기 전에 먼저 constructor를 실행시켜서 state를 초기화 시킨다.
   constructor(props) {
     super(props);
+    this.max_content_id = 3;
     this.state = {
-      mode:"welcome",
+      mode:"create",
       selected_content_id:2,
       subject:{title:"WEB", sub:"world wide web!!!"},
       welcome:{title:"Welcome", desc:"Hello, React!"},
@@ -59,10 +62,11 @@ class App extends Component {
   }
   render() {
     console.log("App render");
-    var _title, _desc = null;
+    var _title, _desc, _article = null;
     if(this.state.mode === "welcome") {
       _title = this.state.welcome.title;
       _desc = this.state.welcome.desc;
+      _article = <ReadContent title = {_title} desc = {_desc}></ReadContent>;
     } else if(this.state.mode === "read") {
       var i = 0;
       while(i < this.state.contents.length) {
@@ -74,6 +78,22 @@ class App extends Component {
         }
         i += 1;
       }
+      _article = <ReadContent title = {_title} desc = {_desc}></ReadContent>;
+    } else if(this.state.mode === "create") {
+      _article = <CreateContent onSubmit={function(_title, _desc){
+        console.log(_title, _desc);
+        this.max_content_id += 1;
+
+        //push는 원본을 바꾸면서 원소를 추가한다.
+        // this.state.contents.push({id:this.max_content_id, title:_title, desc:_desc});
+        
+        //원본을 바꾸지 않고 추가만 하는 concat을 사용하는것이 좋다. 익숙해지기.
+        var _contents = this.state.contents.concat({id:this.max_content_id, title:_title, desc:_desc});
+        
+        this.setState({
+          contents:_contents
+        });
+      }.bind(this)}></CreateContent>;
     }
     return (
       <div className="App">
@@ -105,8 +125,15 @@ class App extends Component {
           }.bind(this)}
           data = {this.state.contents}></TOC>
 
-        <Content title = {_title} desc = {_desc}></Content>
-        <Content title = "Genergy" desc = "PLM is Product Lifecycle Management."></Content>
+        <Control onChangeMode = {function(_mode){
+          this.setState({
+            mode:_mode
+          });
+        }.bind(this)}></Control>
+
+        {_article}
+        {/* <ReadContent title = {_title} desc = {_desc}></ReadContent> */}
+        <ReadContent title = "Genergy" desc = "PLM is Product Lifecycle Management."></ReadContent>
       </div>
     );
   }
