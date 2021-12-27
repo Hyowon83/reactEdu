@@ -50,8 +50,8 @@ class App extends Component {
     super(props);
     this.max_content_id = 3;
     this.state = {
-      mode:"create",
-      selected_content_id:2,
+      mode:"welcome",
+      selected_content_id:0,
       subject:{title:"WEB", sub:"world wide web!!!"},
       welcome:{title:"Welcome", desc:"Hello, React!"},
       contents:[
@@ -149,7 +149,7 @@ class App extends Component {
           title = {this.state.subject.title}
           sub = {this.state.subject.sub}
           onChangePage = {function() {
-            this.setState({ mode:"welcome" });
+            this.setState({ mode:"welcome", selected_content_id:0 });
             // alert("Hey :)");
           }.bind(this)}
         >
@@ -166,9 +166,33 @@ class App extends Component {
           data = {this.state.contents}></TOC>
 
         <Control onChangeMode = {function(_mode){
-          this.setState({
-            mode:_mode
-          });
+          if(_mode === "delete") {
+            if(this.state.selected_content_id === 0) {
+              alert("삭제할 항목을 선택해주세요.");
+            } else {
+              if(window.confirm("really?")) {
+                var _content = Array.from(this.state.contents);
+                var i = 0;
+                while(i < _content.length) {
+                  if(_content[i].id === this.state.selected_content_id) {
+                    _content.splice(i, 1);
+                    break;
+                  }
+                  i += 1;
+                }
+                this.setState({
+                  mode:"welcome",
+                  selected_content_id:0,
+                  contents:_content
+                });
+                alert("deleted!");
+              }
+            }
+          } else {
+            this.setState({
+              mode:_mode
+            });
+          }
         }.bind(this)}></Control>
 
         {/* {_article} */}
